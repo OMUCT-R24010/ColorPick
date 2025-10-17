@@ -41,7 +41,7 @@
             </div>
             <div class="info-item">
                 <div class="info-label">ラウンド</div>
-                <div class="info-value" id="round">1</div>
+                <div class="info-value" id="round">1 / 10</div>
             </div>
         </div>
 
@@ -98,6 +98,7 @@
     <script>
         // Game constants
         const MAX_RGB_DIFFERENCE = 765; // 255 * 3
+        const MAX_ROUNDS = 10; // Maximum number of rounds
         
         // Difficulty settings
         const DIFFICULTIES = {
@@ -251,8 +252,14 @@
 
         // Next round
         function nextRound() {
+            // Check if reached maximum rounds
+            if (round >= MAX_ROUNDS) {
+                gameComplete();
+                return;
+            }
+            
             round++;
-            roundDisplay.textContent = round;
+            roundDisplay.textContent = `${round} / ${MAX_ROUNDS}`;
             generateTargetColor();
             resetSliders();
             resultDiv.className = 'result';
@@ -294,14 +301,33 @@
             }, 1000);
         }
 
-        // End game
+        // End game (time up)
         function endGame() {
             gameActive = false;
             clearInterval(timerInterval);
             checkBtn.disabled = true;
             gameOverDiv.className = 'game-over show';
-            finalScoreDisplay.textContent = score;
-            roundsClearedDisplay.textContent = round - 1;
+            gameOverDiv.innerHTML = `
+                <h2>⏰ タイムアップ！</h2>
+                <p>最終スコア</p>
+                <div class="final-score">${score}</div>
+                <p>クリアしたラウンド数: ${round - 1} / ${MAX_ROUNDS}</p>
+            `;
+        }
+
+        // Game complete (cleared all rounds)
+        function gameComplete() {
+            gameActive = false;
+            clearInterval(timerInterval);
+            checkBtn.disabled = true;
+            gameOverDiv.className = 'game-over show';
+            gameOverDiv.style.background = '#d4edda'; // Green background for success
+            gameOverDiv.innerHTML = `
+                <h2 style="color: #155724;">🎉 ゲームクリア！</h2>
+                <p style="color: #155724;">全${MAX_ROUNDS}ラウンドをクリアしました！</p>
+                <div class="final-score" style="color: #155724;">${score}</div>
+                <p style="color: #155724;">難易度: ${DIFFICULTIES[currentDifficulty].name}</p>
+            `;
         }
 
         // Start new game
@@ -312,12 +338,13 @@
             gameActive = true;
             
             scoreDisplay.textContent = score;
-            roundDisplay.textContent = round;
+            roundDisplay.textContent = `${round} / ${MAX_ROUNDS}`;
             timerDisplay.textContent = timeLeft;
             timerDisplay.classList.remove('warning');
             checkBtn.disabled = false;
             
             gameOverDiv.className = 'game-over';
+            gameOverDiv.style.background = '#f8d7da'; // Reset to default color
             resultDiv.className = 'result';
             
             generateTargetColor();
