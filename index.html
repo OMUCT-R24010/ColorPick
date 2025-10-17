@@ -4,280 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ColorPick - RGB色当てゲーム</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            max-width: 600px;
-            width: 100%;
-        }
-
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 10px;
-            font-size: 2em;
-        }
-
-        .subtitle {
-            text-align: center;
-            color: #666;
-            margin-bottom: 30px;
-            font-size: 0.9em;
-        }
-
-        .game-info {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 30px;
-            padding: 15px;
-            background: #f5f5f5;
-            border-radius: 10px;
-        }
-
-        .info-item {
-            text-align: center;
-        }
-
-        .info-label {
-            font-size: 0.8em;
-            color: #666;
-            margin-bottom: 5px;
-        }
-
-        .info-value {
-            font-size: 1.5em;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .timer {
-            color: #e74c3c;
-        }
-
-        .score {
-            color: #27ae60;
-        }
-
-        .color-display {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .color-box {
-            flex: 1;
-            height: 150px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            position: relative;
-        }
-
-        .color-label {
-            position: absolute;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(255, 255, 255, 0.9);
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.85em;
-            font-weight: bold;
-        }
-
-        .controls {
-            margin-bottom: 30px;
-        }
-
-        .slider-group {
-            margin-bottom: 20px;
-        }
-
-        .slider-label {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-
-        .slider-name {
-            color: #333;
-        }
-
-        .slider-value {
-            color: #666;
-            font-family: monospace;
-        }
-
-        input[type="range"] {
-            width: 100%;
-            height: 8px;
-            border-radius: 5px;
-            outline: none;
-            -webkit-appearance: none;
-        }
-
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: white;
-            cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-        }
-
-        input[type="range"]::-moz-range-thumb {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: white;
-            cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-            border: none;
-        }
-
-        #redSlider {
-            background: linear-gradient(to right, #000, #ff0000);
-        }
-
-        #greenSlider {
-            background: linear-gradient(to right, #000, #00ff00);
-        }
-
-        #blueSlider {
-            background: linear-gradient(to right, #000, #0000ff);
-        }
-
-        .buttons {
-            display: flex;
-            gap: 15px;
-        }
-
-        button {
-            flex: 1;
-            padding: 15px;
-            font-size: 1em;
-            font-weight: bold;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        button:active {
-            transform: translateY(0);
-        }
-
-        .check-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .new-game-btn {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-        }
-
-        .result {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-            font-weight: bold;
-            display: none;
-        }
-
-        .result.show {
-            display: block;
-        }
-
-        .result.success {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .result.info {
-            background: #d1ecf1;
-            color: #0c5460;
-        }
-
-        .result.warning {
-            background: #fff3cd;
-            color: #856404;
-        }
-
-        .game-over {
-            display: none;
-            text-align: center;
-            padding: 20px;
-            background: #f8d7da;
-            border-radius: 10px;
-            margin-top: 20px;
-        }
-
-        .game-over.show {
-            display: block;
-        }
-
-        .game-over h2 {
-            color: #721c24;
-            margin-bottom: 10px;
-        }
-
-        .final-score {
-            font-size: 2em;
-            color: #721c24;
-            margin: 10px 0;
-        }
-
-        @media (max-width: 600px) {
-            .container {
-                padding: 20px;
-            }
-
-            h1 {
-                font-size: 1.5em;
-            }
-
-            .color-display {
-                flex-direction: column;
-            }
-
-            .color-box {
-                height: 100px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <h1>🎨 ColorPick</h1>
         <p class="subtitle">見本の色と同じ色をRGBで探そう！</p>
+
+        <div class="difficulty-selector">
+            <button class="difficulty-btn easy" data-difficulty="easy">
+                🟢 簡単<br>
+                <small>45秒 / 緩い判定</small>
+            </button>
+            <button class="difficulty-btn normal active" data-difficulty="normal">
+                🟡 普通<br>
+                <small>30秒 / 標準判定</small>
+            </button>
+            <button class="difficulty-btn hard" data-difficulty="hard">
+                🔴 難しい<br>
+                <small>30秒 / 厳しい判定</small>
+            </button>
+        </div>
+
+        <div class="difficulty-info" id="difficultyInfo">
+            現在の難易度: 普通 | ラウンドごとに30秒 | 標準の精度判定
+        </div>
 
         <div class="game-info">
             <div class="info-item">
@@ -347,23 +98,66 @@
     <script>
         // Game constants
         const MAX_RGB_DIFFERENCE = 765; // 255 * 3
-        const INITIAL_TIME = 30;
-        const BONUS_TIME = 5;
-        const MAX_TIME = 30;
-        const SCORE_PERFECT = 100;
-        const SCORE_EXCELLENT = 50;
-        const SCORE_GOOD = 30;
-        const SCORE_CLOSE = 10;
-        const THRESHOLD_EXCELLENT = 30;
-        const THRESHOLD_GOOD = 60;
-        const THRESHOLD_CLOSE = 100;
+        
+        // Difficulty settings
+        const DIFFICULTIES = {
+            easy: {
+                name: '簡単',
+                time: 45,
+                thresholds: {
+                    excellent: 50,
+                    good: 100,
+                    close: 150
+                },
+                scores: {
+                    perfect: 100,
+                    excellent: 50,
+                    good: 30,
+                    close: 10
+                },
+                info: 'ラウンドごとに45秒 | 緩い精度判定'
+            },
+            normal: {
+                name: '普通',
+                time: 30,
+                thresholds: {
+                    excellent: 30,
+                    good: 60,
+                    close: 100
+                },
+                scores: {
+                    perfect: 100,
+                    excellent: 50,
+                    good: 30,
+                    close: 10
+                },
+                info: 'ラウンドごとに30秒 | 標準の精度判定'
+            },
+            hard: {
+                name: '難しい',
+                time: 30,
+                thresholds: {
+                    excellent: 15,
+                    good: 40,
+                    close: 70
+                },
+                scores: {
+                    perfect: 150,
+                    excellent: 80,
+                    good: 40,
+                    close: 15
+                },
+                info: 'ラウンドごとに30秒 | 厳しい精度判定'
+            }
+        };
 
         // Game state
+        let currentDifficulty = 'normal';
         let targetR, targetG, targetB;
         let playerR = 128, playerG = 128, playerB = 128;
         let score = 0;
         let round = 1;
-        let timeLeft = INITIAL_TIME;
+        let timeLeft = DIFFICULTIES[currentDifficulty].time;
         let timerInterval = null;
         let gameActive = false;
 
@@ -385,6 +179,8 @@
         const gameOverDiv = document.getElementById('gameOver');
         const finalScoreDisplay = document.getElementById('finalScore');
         const roundsClearedDisplay = document.getElementById('roundsCleared');
+        const difficultyBtns = document.querySelectorAll('.difficulty-btn');
+        const difficultyInfo = document.getElementById('difficultyInfo');
 
         // Generate random target color
         function generateTargetColor() {
@@ -419,6 +215,7 @@
         function checkColor() {
             if (!gameActive) return;
 
+            const difficulty = DIFFICULTIES[currentDifficulty];
             const difference = calculateDifference();
             const accuracy = ((MAX_RGB_DIFFERENCE - difference) / MAX_RGB_DIFFERENCE * 100).toFixed(1);
             
@@ -426,23 +223,23 @@
             
             if (difference === 0) {
                 resultDiv.className = 'result show success';
-                resultDiv.textContent = `🎉 完璧！ 100%の精度！ +${SCORE_PERFECT}点`;
-                score += SCORE_PERFECT;
+                resultDiv.textContent = `🎉 完璧！ 100%の精度！ +${difficulty.scores.perfect}点`;
+                score += difficulty.scores.perfect;
                 setTimeout(nextRound, 1500);
-            } else if (difference <= THRESHOLD_EXCELLENT) {
+            } else if (difference <= difficulty.thresholds.excellent) {
                 resultDiv.className = 'result show success';
-                resultDiv.textContent = `✨ 素晴らしい！ 精度${accuracy}% +${SCORE_EXCELLENT}点`;
-                score += SCORE_EXCELLENT;
+                resultDiv.textContent = `✨ 素晴らしい！ 精度${accuracy}% +${difficulty.scores.excellent}点`;
+                score += difficulty.scores.excellent;
                 setTimeout(nextRound, 1500);
-            } else if (difference <= THRESHOLD_GOOD) {
+            } else if (difference <= difficulty.thresholds.good) {
                 resultDiv.className = 'result show info';
-                resultDiv.textContent = `👍 良い！ 精度${accuracy}% +${SCORE_GOOD}点`;
-                score += SCORE_GOOD;
+                resultDiv.textContent = `👍 良い！ 精度${accuracy}% +${difficulty.scores.good}点`;
+                score += difficulty.scores.good;
                 setTimeout(nextRound, 1500);
-            } else if (difference <= THRESHOLD_CLOSE) {
+            } else if (difference <= difficulty.thresholds.close) {
                 resultDiv.className = 'result show warning';
-                resultDiv.textContent = `🤔 もう少し！ 精度${accuracy}% +${SCORE_CLOSE}点`;
-                score += SCORE_CLOSE;
+                resultDiv.textContent = `🤔 もう少し！ 精度${accuracy}% +${difficulty.scores.close}点`;
+                score += difficulty.scores.close;
                 setTimeout(nextRound, 1500);
             } else {
                 resultDiv.className = 'result show warning';
@@ -459,8 +256,10 @@
             generateTargetColor();
             resetSliders();
             resultDiv.className = 'result';
-            timeLeft += BONUS_TIME; // Add bonus time for completing a round
-            if (timeLeft > MAX_TIME) timeLeft = MAX_TIME; // Cap at maximum time
+            // Reset timer to full time for each round
+            timeLeft = DIFFICULTIES[currentDifficulty].time;
+            timerDisplay.textContent = timeLeft;
+            timerDisplay.classList.remove('warning');
         }
 
         // Reset sliders
@@ -482,6 +281,13 @@
                 timeLeft--;
                 timerDisplay.textContent = timeLeft;
                 
+                // Add warning animation when time is low
+                if (timeLeft <= 10) {
+                    timerDisplay.classList.add('warning');
+                } else {
+                    timerDisplay.classList.remove('warning');
+                }
+                
                 if (timeLeft <= 0) {
                     endGame();
                 }
@@ -502,12 +308,13 @@
         function startNewGame() {
             score = 0;
             round = 1;
-            timeLeft = INITIAL_TIME;
+            timeLeft = DIFFICULTIES[currentDifficulty].time;
             gameActive = true;
             
             scoreDisplay.textContent = score;
             roundDisplay.textContent = round;
             timerDisplay.textContent = timeLeft;
+            timerDisplay.classList.remove('warning');
             checkBtn.disabled = false;
             
             gameOverDiv.className = 'game-over';
@@ -522,14 +329,49 @@
             startTimer();
         }
 
+        // Change difficulty
+        function changeDifficulty(difficulty) {
+            if (gameActive) {
+                if (!confirm('ゲーム中です。難易度を変更すると新しいゲームが開始されます。よろしいですか？')) {
+                    return;
+                }
+            }
+            
+            currentDifficulty = difficulty;
+            
+            // Update UI
+            difficultyBtns.forEach(btn => {
+                if (btn.dataset.difficulty === difficulty) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            
+            difficultyInfo.textContent = `現在の難易度: ${DIFFICULTIES[difficulty].name} | ${DIFFICULTIES[difficulty].info}`;
+            
+            // Start new game with new difficulty
+            if (timerInterval !== null) {
+                clearInterval(timerInterval);
+            }
+            startNewGame();
+        }
+
         // Event listeners
         redSlider.addEventListener('input', updatePlayerColor);
         greenSlider.addEventListener('input', updatePlayerColor);
         blueSlider.addEventListener('input', updatePlayerColor);
         checkBtn.addEventListener('click', checkColor);
         newGameBtn.addEventListener('click', startNewGame);
+        
+        difficultyBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                changeDifficulty(btn.dataset.difficulty);
+            });
+        });
 
         // Initialize game
+        difficultyInfo.textContent = `現在の難易度: ${DIFFICULTIES[currentDifficulty].name} | ${DIFFICULTIES[currentDifficulty].info}`;
         startNewGame();
     </script>
 </body>
