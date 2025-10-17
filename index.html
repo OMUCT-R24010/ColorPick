@@ -345,13 +345,26 @@
     </div>
 
     <script>
+        // Game constants
+        const MAX_RGB_DIFFERENCE = 765; // 255 * 3
+        const INITIAL_TIME = 30;
+        const BONUS_TIME = 5;
+        const MAX_TIME = 30;
+        const SCORE_PERFECT = 100;
+        const SCORE_EXCELLENT = 50;
+        const SCORE_GOOD = 30;
+        const SCORE_CLOSE = 10;
+        const THRESHOLD_EXCELLENT = 30;
+        const THRESHOLD_GOOD = 60;
+        const THRESHOLD_CLOSE = 100;
+
         // Game state
         let targetR, targetG, targetB;
         let playerR = 128, playerG = 128, playerB = 128;
         let score = 0;
         let round = 1;
-        let timeLeft = 30;
-        let timerInterval;
+        let timeLeft = INITIAL_TIME;
+        let timerInterval = null;
         let gameActive = false;
 
         // DOM elements
@@ -407,33 +420,29 @@
             if (!gameActive) return;
 
             const difference = calculateDifference();
-            const maxDifference = 765; // 255 * 3
-            const accuracy = ((maxDifference - difference) / maxDifference * 100).toFixed(1);
+            const accuracy = ((MAX_RGB_DIFFERENCE - difference) / MAX_RGB_DIFFERENCE * 100).toFixed(1);
             
             resultDiv.className = 'result show';
             
             if (difference === 0) {
                 resultDiv.className = 'result show success';
-                resultDiv.textContent = `🎉 完璧！ 100%の精度！ +100点`;
-                score += 100;
+                resultDiv.textContent = `🎉 完璧！ 100%の精度！ +${SCORE_PERFECT}点`;
+                score += SCORE_PERFECT;
                 setTimeout(nextRound, 1500);
-            } else if (difference <= 30) {
+            } else if (difference <= THRESHOLD_EXCELLENT) {
                 resultDiv.className = 'result show success';
-                const points = 50;
-                resultDiv.textContent = `✨ 素晴らしい！ 精度${accuracy}% +${points}点`;
-                score += points;
+                resultDiv.textContent = `✨ 素晴らしい！ 精度${accuracy}% +${SCORE_EXCELLENT}点`;
+                score += SCORE_EXCELLENT;
                 setTimeout(nextRound, 1500);
-            } else if (difference <= 60) {
+            } else if (difference <= THRESHOLD_GOOD) {
                 resultDiv.className = 'result show info';
-                const points = 30;
-                resultDiv.textContent = `👍 良い！ 精度${accuracy}% +${points}点`;
-                score += points;
+                resultDiv.textContent = `👍 良い！ 精度${accuracy}% +${SCORE_GOOD}点`;
+                score += SCORE_GOOD;
                 setTimeout(nextRound, 1500);
-            } else if (difference <= 100) {
+            } else if (difference <= THRESHOLD_CLOSE) {
                 resultDiv.className = 'result show warning';
-                const points = 10;
-                resultDiv.textContent = `🤔 もう少し！ 精度${accuracy}% +${points}点`;
-                score += points;
+                resultDiv.textContent = `🤔 もう少し！ 精度${accuracy}% +${SCORE_CLOSE}点`;
+                score += SCORE_CLOSE;
                 setTimeout(nextRound, 1500);
             } else {
                 resultDiv.className = 'result show warning';
@@ -450,8 +459,8 @@
             generateTargetColor();
             resetSliders();
             resultDiv.className = 'result';
-            timeLeft += 5; // Add bonus time for completing a round
-            if (timeLeft > 30) timeLeft = 30; // Cap at 30 seconds
+            timeLeft += BONUS_TIME; // Add bonus time for completing a round
+            if (timeLeft > MAX_TIME) timeLeft = MAX_TIME; // Cap at maximum time
         }
 
         // Reset sliders
@@ -493,7 +502,7 @@
         function startNewGame() {
             score = 0;
             round = 1;
-            timeLeft = 30;
+            timeLeft = INITIAL_TIME;
             gameActive = true;
             
             scoreDisplay.textContent = score;
@@ -507,7 +516,9 @@
             generateTargetColor();
             resetSliders();
             
-            clearInterval(timerInterval);
+            if (timerInterval !== null) {
+                clearInterval(timerInterval);
+            }
             startTimer();
         }
 
